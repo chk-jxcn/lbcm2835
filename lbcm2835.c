@@ -80,8 +80,8 @@
 #define INT_FUNC(name)							\
 	static int lua##name(lua_State *L)				\
 	{								\
-		int ret = name();					\
-		lua_pushinteger(L, ret);				\
+		uint64_t ret = name();					\
+		lua_pushnumber(L, ret);					\
 		return 1;						\
 	}								\
 	REG_DEC(name);
@@ -89,7 +89,7 @@
 #define VOID_FUNC_INT(name)						\
 	static int lua##name(lua_State *L)				\
 	{								\
-		name(luaL_checkinteger(L, 1));				\
+		name(luaL_checknumber(L, 1));				\
 		return 0;						\
 	}								\
 	REG_DEC(name);
@@ -105,8 +105,8 @@
 #define VOID_FUNC_INT_INT(name)						\
 	static int lua##name(lua_State *L)				\
 	{								\
-		name(luaL_checkinteger(L, 1), 				\
-			luaL_checkinteger(L, 2));			\
+		name(luaL_checknumber(L, 1), 				\
+			luaL_checknumber(L, 2));			\
 		return 0;						\
 	}								\
 	REG_DEC(name);
