@@ -34,7 +34,7 @@
 
 #define REG(set, ptype)							\
 	SET_DECLARE(set, ptype);					\
-	static luaL_Reg __reg_entry_dummy = {"dummy", NULL};	\
+	static luaL_Reg __reg_entry_dummy = {"dummy", NULL};		\
 	DATA_SET(bcm2835_lib, __reg_entry_dummy)
 
 #define REG_BEGIN()							\
@@ -64,13 +64,13 @@
 #define FREE_BUF(name)							\
 	do {								\
 		if (name != gobal_buf)					\
-			free((void*)name);					\
+			free((void*)name);				\
 	} while (0)
 			
 
 
 #define VOID_FUNC(name)							\
-	static int lua##name(lua_State *L)					\
+	static int lua##name(lua_State *L)				\
 	{								\
 		name();							\
 		return 0;						\
@@ -78,7 +78,7 @@
 	REG_DEC(name);
 
 #define INT_FUNC(name)							\
-	static int lua##name(lua_State *L)					\
+	static int lua##name(lua_State *L)				\
 	{								\
 		int ret = name();					\
 		lua_pushinteger(L, ret);				\
@@ -87,7 +87,7 @@
 	REG_DEC(name);
 
 #define VOID_FUNC_INT(name)						\
-	static int lua##name(lua_State *L)					\
+	static int lua##name(lua_State *L)				\
 	{								\
 		name(luaL_checkinteger(L, 1));				\
 		return 0;						\
@@ -95,15 +95,15 @@
 	REG_DEC(name);
 
 #define INT_FUNC_INT(name)						\
-	static int lua##name(lua_State *L)					\
+	static int lua##name(lua_State *L)				\
 	{								\
-		lua_pushinteger(L, name(luaL_checkinteger(L, 1)));		\
+		lua_pushinteger(L, name(luaL_checkinteger(L, 1)));	\
 		return 1;						\
 	}								\
 	REG_DEC(name);
 
 #define VOID_FUNC_INT_INT(name)						\
-	static int lua##name(lua_State *L)					\
+	static int lua##name(lua_State *L)				\
 	{								\
 		name(luaL_checkinteger(L, 1), 				\
 			luaL_checkinteger(L, 2));			\
@@ -112,7 +112,7 @@
 	REG_DEC(name);
 
 #define VOID_FUNC_ISTR_L(name)						\
-	static int lua##name(lua_State *L)					\
+	static int lua##name(lua_State *L)				\
 	{								\
 		char *in = NULL;					\
 		int size = 0;						\
@@ -124,7 +124,7 @@
 	REG_DEC(name);
 
 #define INT_FUNC_ISTR_L(name)						\
-	static int lua##name(lua_State *L)					\
+	static int lua##name(lua_State *L)				\
 	{								\
 		char *in = NULL;					\
 		int size = 0;						\
@@ -153,7 +153,7 @@
 	REG_DEC(name);
 
 #define INT_FUNC_OSTR_L(name)						\
-	static int lua##name(lua_State *L)					\
+	static int lua##name(lua_State *L)				\
 	{								\
 		char *out = NULL;					\
 		int size = 0;						\
@@ -170,7 +170,7 @@
 	REG_DEC(name);
 
 #define VOID_FUNC_ISTR_OSTR_L(name)					\
-	static int lua##name(lua_State *L)					\
+	static int lua##name(lua_State *L)				\
 	{								\
 		char *in = NULL;					\
 		int size = 0;						\
@@ -186,7 +186,7 @@
 	REG_DEC(name);
 
 #define VOID_FUNC_IOSTR_L(name)						\
-	static int lua##name(lua_State *L)					\
+	static int lua##name(lua_State *L)				\
 	{								\
 		char *in = NULL;					\
 		int size = 0;						\
@@ -197,23 +197,23 @@
 		memcpy(inout, in, size);				\
 		name(inout, size); 					\
 		lua_pushlstring(L, inout, size);			\
-		FREE_BUF(inout);						\
+		FREE_BUF(inout);					\
 		return 1;						\
 	}								\
 	REG_DEC(name);
 
 
 #define INT_FUNC_ISTR_L_OSTR_L(name)					\
-	static int lua##name(lua_State *L)					\
+	static int lua##name(lua_State *L)				\
 	{								\
 		char *in = NULL;					\
 		int insize = 0;						\
 		char *out = NULL;					\
 		int outsize = 0;					\
-		int ret = 0;					\
+		int ret = 0;						\
 		in = luaL_checklstring(L, 1, &insize);			\
 		outsize = luaL_checkinteger(L, 2);			\
-		if (insize <= 0 || outsize <= 0) return 0;				\
+		if (insize <= 0 || outsize <= 0) return 0;		\
 		MALLOC_BUF(out, outsize);				\
 		name(in, insize, out, outsize); 			\
 		lua_pushlstring(L, out, outsize);			\
