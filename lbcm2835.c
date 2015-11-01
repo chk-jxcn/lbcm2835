@@ -49,8 +49,7 @@
 	DATA_SET(bcm2835_lib, __reg_entry_##name)
 
 #define REG_END()							\
-	void dummy_end() {};						\
-	static luaL_Reg __reg_entry_end = {NULL, dummy_end};		\
+	static luaL_Reg __reg_entry_end = {NULL, (lua_CFunction)1};	\
 	DATA_SET(bcm2835_lib, __reg_entry_end);				\
 
 #define MALLOC_BUF(name, size) 						\
