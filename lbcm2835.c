@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <string.h>
 #include "lua.h"
 
 #include "lauxlib.h"
@@ -45,11 +47,12 @@
 
 
 #define REG_DEC(name)							\
-	static luaL_Reg __reg_entry_##name = {#name, lua##name};	\
+	static luaL_Reg __reg_entry_##name = {#name, lua_##name};	\
 	DATA_SET(bcm2835_lib, __reg_entry_##name)
 
 #define REG_END()							\
-	static luaL_Reg __reg_entry_end = {NULL, (lua_CFunction)1};	\
+	static int __dummy_end(lua_State *L) {return 0;}		\
+	static luaL_Reg __reg_entry_end = {NULL, __dummy_end};		\
 	DATA_SET(bcm2835_lib, __reg_entry_end);				\
 
 #define MALLOC_BUF(name, size) 						\
@@ -69,7 +72,7 @@
 
 
 #define VOID_FUNC(name)							\
-	static int lua##name(lua_State *L)				\
+	static int lua_##name(lua_State *L)				\
 	{								\
 		name();							\
 		return 0;						\
@@ -77,7 +80,7 @@
 	REG_DEC(name);
 
 #define INT_FUNC(name)							\
-	static int lua##name(lua_State *L)				\
+	static int lua_##name(lua_State *L)				\
 	{								\
 		uint64_t ret = name();					\
 		lua_pushnumber(L, ret);					\
@@ -86,7 +89,7 @@
 	REG_DEC(name);
 
 #define VOID_FUNC_INT(name)						\
-	static int lua##name(lua_State *L)				\
+	static int lua_##name(lua_State *L)				\
 	{								\
 		name(luaL_checknumber(L, 1));				\
 		return 0;						\
@@ -94,7 +97,7 @@
 	REG_DEC(name);
 
 #define INT_FUNC_INT(name)						\
-	static int lua##name(lua_State *L)				\
+	static int lua_##name(lua_State *L)				\
 	{								\
 		lua_pushinteger(L, name(luaL_checkinteger(L, 1)));	\
 		return 1;						\
@@ -102,7 +105,7 @@
 	REG_DEC(name);
 
 #define VOID_FUNC_INT_INT(name)						\
-	static int lua##name(lua_State *L)				\
+	static int lua_##name(lua_State *L)				\
 	{								\
 		name(luaL_checknumber(L, 1), 				\
 			luaL_checknumber(L, 2));			\
@@ -110,10 +113,20 @@
 	}								\
 	REG_DEC(name);
 
-#define VOID_FUNC_ISTR_L(name)						\
-	static int lua##name(lua_State *L)				\
+#define VOID_FUNC_INT_INT_INT(name)					\
+	static int lua_##name(lua_State *L)				\
 	{								\
-		char *in = NULL;					\
+		name(luaL_checknumber(L, 1), 				\
+			luaL_checknumber(L, 2),				\
+			luaL_checknumber(L, 3));			\
+		return 0;						\
+	}								\
+	REG_DEC(name);
+
+#define VOID_FUNC_ISTR_L(name)						\
+	static int lua_##name(lua_State *L)				\
+	{								\
+		const char *in = NULL;					\
 		int size = 0;						\
 		in = luaL_checklstring(L, 1, &size);			\
 		if (size <= 0) return 0;				\
@@ -123,9 +136,9 @@
 	REG_DEC(name);
 
 #define INT_FUNC_ISTR_L(name)						\
-	static int lua##name(lua_State *L)				\
+	static int lua_##name(lua_State *L)				\
 	{								\
-		char *in = NULL;					\
+		const char *in = NULL;					\
 		int size = 0;						\
 		int ret = 0;						\
 		in = luaL_checklstring(L, 1, &size);			\
@@ -137,7 +150,7 @@
 	REG_DEC(name);
 
 #define VOID_FUNC_OSTR_L(name)						\
-	static int lua##name(lua_State *L)				\
+	static int lua_##name(lua_State *L)				\
 	{								\
 		char *out = NULL;					\
 		int size = 0;						\
@@ -152,7 +165,7 @@
 	REG_DEC(name);
 
 #define INT_FUNC_OSTR_L(name)						\
-	static int lua##name(lua_State *L)				\
+	static int lua_##name(lua_State *L)				\
 	{								\
 		char *out = NULL;					\
 		int size = 0;						\
@@ -169,9 +182,9 @@
 	REG_DEC(name);
 
 #define VOID_FUNC_ISTR_OSTR_L(name)					\
-	static int lua##name(lua_State *L)				\
+	static int lua_##name(lua_State *L)				\
 	{								\
-		char *in = NULL;					\
+		const char *in = NULL;					\
 		int size = 0;						\
 		char *out = NULL;					\
 		in = luaL_checklstring(L, 1, &size);			\
@@ -185,9 +198,9 @@
 	REG_DEC(name);
 
 #define VOID_FUNC_IOSTR_L(name)						\
-	static int lua##name(lua_State *L)				\
+	static int lua_##name(lua_State *L)				\
 	{								\
-		char *in = NULL;					\
+		const char *in = NULL;					\
 		int size = 0;						\
 		char *inout = NULL;					\
 		in = luaL_checklstring(L, 1, &size);			\
@@ -203,9 +216,9 @@
 
 
 #define INT_FUNC_ISTR_L_OSTR_L(name)					\
-	static int lua##name(lua_State *L)				\
+	static int lua_##name(lua_State *L)				\
 	{								\
-		char *in = NULL;					\
+		const char *in = NULL;					\
 		int insize = 0;						\
 		char *out = NULL;					\
 		int outsize = 0;					\
