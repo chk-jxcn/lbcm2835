@@ -1,6 +1,6 @@
 ##About lbcm2835
 
-A lua binding of bcm2835 c libary.
+A lua binding of bcm2835 c library.
 
-Not complet yet.
+Not completed yet.
 
