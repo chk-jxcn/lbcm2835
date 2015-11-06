@@ -310,7 +310,7 @@ VOID_FUNC_INT_INT(bcm2835_pwm_set_data);
 
 REG_END();
 
-LUALIB_API int luaopen_bcm2835 (lua_State *L) 
+LUALIB_API int luaopen_bcm2835lua51 (lua_State *L) 
 {
   luaL_register(L, "bcm2835", REG_BEGIN());
   return 1;
