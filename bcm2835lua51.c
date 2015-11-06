@@ -240,9 +240,9 @@
 static char gobal_buf[BCM2835_BUFF_SZ] = {0};
 
 REG(bcm2835_lib, luaL_Reg);
-VOID_FUNC(bcm2835_init);
-VOID_FUNC(bcm2835_close);
-VOID_FUNC(bcm2835_version);
+INT_FUNC(bcm2835_init);
+INT_FUNC(bcm2835_close);
+INT_FUNC(bcm2835_version);
 
 /* gpio */
 VOID_FUNC_INT_INT(bcm2835_gpio_fsel);
@@ -250,8 +250,8 @@ VOID_FUNC_INT(bcm2835_gpio_set);
 VOID_FUNC_INT(bcm2835_gpio_clr);
 VOID_FUNC_INT(bcm2835_gpio_set_multi);
 VOID_FUNC_INT(bcm2835_gpio_clr_multi);
-VOID_FUNC_INT(bcm2835_gpio_lev);
-VOID_FUNC_INT(bcm2835_gpio_eds);
+INT_FUNC_INT(bcm2835_gpio_lev);
+INT_FUNC_INT(bcm2835_gpio_eds);
 VOID_FUNC_INT(bcm2835_gpio_set_eds);
 VOID_FUNC_INT(bcm2835_gpio_ren);
 VOID_FUNC_INT(bcm2835_gpio_clr_ren);
@@ -265,7 +265,7 @@ VOID_FUNC_INT(bcm2835_gpio_afen);
 VOID_FUNC_INT(bcm2835_gpio_clr_afen);
 VOID_FUNC_INT(bcm2835_gpio_pud);
 VOID_FUNC_INT_INT(bcm2835_gpio_pudclk);
-VOID_FUNC_INT(bcm2835_gpio_pad);
+INT_FUNC_INT(bcm2835_gpio_pad);
 VOID_FUNC_INT_INT(bcm2835_gpio_set_pad);
 VOID_FUNC_INT(bcm2835_delay);
 VOID_FUNC_INT(bcm2835_delayMicroseconds);
@@ -312,6 +312,6 @@ REG_END();
 
 LUALIB_API int luaopen_bcm2835lua51 (lua_State *L) 
 {
-  luaL_register(L, "bcm2835", REG_BEGIN());
-  return 1;
+	luaL_register(L, "bcm2835lua51", REG_BEGIN());
+	return 1;
 }
