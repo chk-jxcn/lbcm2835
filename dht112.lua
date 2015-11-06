@@ -4,7 +4,6 @@ require "constants"
 seq = {}
 PIN = 12
 pi.bcm2835_init()
-pi.bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_OUTP)
 
 --[[
 
@@ -17,14 +16,15 @@ pi.bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_OUTP)
 7. <- 50us LOW
 
 ]]
+
+pi.bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_OUTP)
+pi.bcm2835_gpio_set_pud(PIN, BCM2835_GPIO_PUD_UP)
 pi.bcm2835_gpio_write(PIN, LOW)
-pi.bcm2835_delay(18)		
-pi.bcm2835_gpio_write(PIN, HIGH)
-pi.bcm2835_gpio_write(PIN, LOW)
+pi.bcm2835_delay(20)		
 pi.bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_INPT)
---pi.bcm2835_gpio_set_pud(PIN, BCM2835_GPIO_PUD_UP)
+pi.bcm2835_delayMicroseconds(10)
 i = 0
-interval = 5
+interval = 1
 count = 4800 / interval
 stop = 100 / interval		-- stop at 100us of continuous HIGH output 
 low = 0
@@ -32,10 +32,9 @@ high = 0
 bits = {}
 repeat
 	local out = pi.bcm2835_gpio_lev(PIN)
-
 	if out == 1 then
 		high = high + 1
-		--if high >= stop then break end
+		if low ~= 0 and high >= 5 * low  then break end
 	else
 		if high ~= 0 then -- do the compare
 			if low ~= 0 then
