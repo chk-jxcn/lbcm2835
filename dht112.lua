@@ -20,47 +20,51 @@ pi.bcm2835_init()
 pi.bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_OUTP)
 pi.bcm2835_gpio_set_pud(PIN, BCM2835_GPIO_PUD_UP)
 pi.bcm2835_gpio_write(PIN, LOW)
-pi.bcm2835_delay(20)		
+pi.bcm2835_delay(20)
 pi.bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_INPT)
 pi.bcm2835_delayMicroseconds(10)
-i = 0
-interval = 1
-count = 4800 / interval
-stop = 100 / interval		-- stop at 100us of continuous HIGH output 
+
 low = 0
 high = 0
-bits = {}
+raw = {}
+interval = 1
 repeat
 	local out = pi.bcm2835_gpio_lev(PIN)
 	if out == 1 then
 		high = high + 1
-		if low ~= 0 and high >= 5 * low  then break end
+		if low ~= 0 and high >= 5 * low  or high > 100 then break end
 	else
-		if high ~= 0 then -- do the compare
+		if high ~= 0 then
 			if low ~= 0 then
-				if high < low then
-					table.insert(bits, 0)
-				else
-					table.insert(bits, 1)
-				end
+				table.insert(raw, {low, high})
 			end
 			high = 0
 			low = 0
 		end
 		low = low + 1
 	end
-	-- table.insert(seq, out)
-	pi.bcm2835_delayMicroseconds(interval)
-	i = i + 1
-until i >= count
+	-- pi.bcm2835_delayMicroseconds(interval)
+until nil 
+
+-- convert to bits 
+bits = {}
+for _, v in ipairs(raw) do
+	-- print(v[1], v[2])
+	if v[1] * 0.8 < v[2]  then
+		table.insert(bits, 1)
+	else
+		table.insert(bits, 0)
+	end
+
+end
 
 -- delete fisrt bit
 table.remove(bits, 1)
 if table.maxn(bits) ~= 40 then
-	error(string.format("data not 40 bits, but %d", table.maxn(bits)))
+	print(string.format("data not 40 bits, but %d", table.maxn(bits)))
+	return
 end
-
-print(table.concat(bits, ""))
+print(table.concat(bits,""))
 
 -- convert bits to digit
 data = {}
@@ -73,13 +77,10 @@ for k,v in ipairs(bits) do
 	end
 end
 
-print("TEMP:" .. data[3] .. "   H:" .. data[1])
+io.write("TEMP:" .. data[3] .. "	H:" .. data[1] .. "	")
 if data[5] == data[1] + data[3] then
-	print "Parity OK"
+	print "P: GOOD"
 else
-	print "Parity WRONG"
+	print "P: ERROR"
 end
-
-
-
 
