@@ -3,10 +3,11 @@
 A lua binding of bcm2835 c library.
 
 Note that libbcm2835 don't have a -fPIC compile option, so compile it with below command:
+```
 gcc -fPIC -O3 -c bcm2835.c -o bcm2835.o
 gcc -fPIC -O0 -c bcm2835lua51.c -o bcm2835lua51.o -I/usr/include/lua5.1/
 gcc  -shared -fPIC -o bcm2835lua51.so bcm2835lua51.o bcm2835.o
-
+```
 
 ##Example
 ```lua
