@@ -7,12 +7,15 @@ Note that libbcm2835 don't have a -fPIC compile option, so compile it with below
 gcc -fPIC -O3 -c bcm2835.c -o bcm2835.o
 gcc -fPIC -O0 -c bcm2835lua51.c -o bcm2835lua51.o -I/usr/include/lua5.1/
 gcc  -shared -fPIC -o bcm2835lua51.so bcm2835lua51.o bcm2835.o
+cp bcm2835 /usr/local/share/lua/5.1
+cp bcm2835lua51.so /usr/local/lib/5.1
 ```
+
 
 ##Example
 ```lua
-local pi = require "bcm2835" --constants will loaded into bcm2835
-require "contants" -- or you can also load contants into global table.
+local pi = require "bcm2835" -- constants will loaded into bcm2835
+require "bcm2835.contants" -- or you can also load contants into global table.
 
 --[[
 export functions:
