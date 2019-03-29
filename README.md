@@ -1,4 +1,4 @@
-##About lbcm2835
+## About lbcm2835
 
 A lua binding of bcm2835 c library.
 
@@ -12,7 +12,7 @@ cp bcm2835lua51.so /usr/local/lib/5.1
 ```
 
 
-##Example
+## Example
 ```lua
 local pi = require "bcm2835" -- constants will loaded into bcm2835
 require "bcm2835.contants" -- or you can also load contants into global table.
@@ -31,7 +31,7 @@ pi.bcm2835_delayMicroseconds(10)  -- busy wait on system timer register. (~us)
 
 ```
 
-###TODO
+### TODO
 * I2C and SPI did't test.
 
 * operat PIN by table
@@ -82,9 +82,9 @@ end
 
 ```
 
-###License
+### License
 None
 
-###Contact
+### Contact
 chk.jxcn#gmail.com
 
